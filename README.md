@@ -2,7 +2,6 @@
 
 [![CI — Pruebas y Cobertura](https://github.com/crisega24-netizen/gamboa-post1-u9/actions/workflows/ci.yml/badge.svg)](https://github.com/crisega24-netizen/gamboa-post1-u9/actions/workflows/ci.yml)
 
-
 ## Descripción
 
 Repositorio del post-contenido de la Unidad 9. Es un único proyecto Spring Boot que busca las citas médicas de las próximas 24 horas que aún no han sido notificadas y envía un recordatorio por el canal preferido del paciente (correo o SMS). El servicio central, `CitaReminderServiceImpl`, nace diseñado con dos patrones del curso, ambos inyectados por constructor (DIP):
@@ -162,22 +161,6 @@ open target/site/jacoco/index.html   # reporte de cobertura (macOS)
 | 04 | Reporte de cobertura JaCoCo | ![04](docs/capturas/04-reporte-jacoco.png) |
 | 05 | Workflow de GitHub Actions con estado Success y sin advertencias | ![05](docs/capturas/05-github-actions-success.png) |
 | 06 | Log del job: 11 pruebas, umbral de cobertura cumplido y BUILD SUCCESS | ![06](docs/capturas/06-github-actions-log.png) |
-
-## Historial de commits
-
-| Parte | Commit | Mensaje |
-|---|---|---|
-| 1 | `e5540ed` | feat: inicializar recordatorios-citas-service con entidad Cita y CitaRepository |
-| 1 | `a26b04f` | feat(service): implementar CitaReminderServiceImpl con Strategy y Factory inyectados |
-| 1 | `fc3aee4` | test(service): agregar suite unitaria con JUnit 5, Mockito y Clock fijo como fake |
-| 2 | `479285d` | feat(service): agregar enviarRecordatorioUrgente con new hardcodeado (a refactorizar) |
-| 2 | `eefed2e` | refactor(service): inyectar canalUrgente por constructor para habilitar pruebas (DIP) |
-| 2 | `58acee5` | test(service): agregar pruebas de enviarRecordatorioUrgente ahora posibles tras el refactor |
-| 2 | `d21c30e` | test(integration): agregar DataJpaTest y SpringBootTest con Clock fijo y gateway mockeado |
-| 2 | `b13a2cb` | ci: configurar pipeline de GitHub Actions |
-| 2 | `262b2ae` | ci: actualizar acciones a v5 y fijar runner ubuntu-24.04 para eliminar advertencias |
-| 2 | `9314fdc` | ci: actualizar upload-artifact a v7 (Node 24) |
-| 2 | — | docs: completar README con badge de CI, decisiones de diseño y evidencias |
 
 ## Herramientas utilizadas
 
