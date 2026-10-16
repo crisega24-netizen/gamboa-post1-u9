@@ -36,6 +36,20 @@ src/test/java/com/clinica/recordatorios/
 | `enviarRecordatoriosPendientes_ventanaDeterministaSegunClockFijo_consultaLosLimitesExactos` | La ventana consultada es exactamente 10/08/2026 09:00 → 11/08/2026 09:00 gracias al Clock fijo |
 | `enviarRecordatoriosPendientes_sinCitasPendientes_noConsultaLaFactory` | Sin citas pendientes no se consulta la Factory ni se guarda nada |
 
+## Parte 2 — Refactor DIP, integración y CI/CD
+
+### Diagnóstico antes del refactor (Paso 7)
+
+La primera versión de `enviarRecordatorioUrgente(Long citaId)` compila y funciona, pero no se puede probar en aislamiento. La línea responsable es la 52 de `CitaReminderServiceImpl`:
+
+```java
+ReminderChannel canalUrgente = new SmsReminderChannel(new TwilioNotificadorSmsGateway());
+```
+
+El método decide por sí mismo **qué** canal usar y **cómo** construirlo. Como `SmsReminderChannel` y `TwilioNotificadorSmsGateway` se crean con `new` dentro del cuerpo del método, no existe ningún punto (constructor, parámetro o setter) por donde una prueba pueda entregar un doble. Por eso es imposible escribir la prueba del escenario «el gateway de SMS falla y la cita no debe quedar marcada como enviada»: la prueba no puede provocar el fallo y, en cambio, terminaría llamando al gateway real. Interceptar ese `new` con `Mockito.mockConstruction()` sería tratar el síntoma con una herramienta más avanzada, cuando el problema es de diseño: el método depende de clases concretas y no de la abstracción `ReminderChannel` (viola DIP).
+
+El contraste con `enviarRecordatoriosPendientes()` es directo: ese método nunca construye sus colaboradores, los recibe por constructor (`CitaRepository`, `ReminderChannelFactory` y `Clock`). Por eso en la Parte 1 se pudieron reemplazar por un Mock, otro Mock y un Fake sin tocar el código de producción.
+
 ## Decisiones de diseño
 
 ### Mock, Stub o Fake para cada colaborador (Paso 5)
